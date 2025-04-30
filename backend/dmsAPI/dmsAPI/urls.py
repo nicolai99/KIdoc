@@ -15,18 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 from ninja import NinjaAPI
+from dmsApp.views import router
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 api = NinjaAPI()
-
-
-@api.get("/add")
-def add(request, a: int, b: int):
-    return {"result": a + b}
+api.add_router("/upload", router)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("polls/", include("dmsApp.urls")),
+    path("admin/", admin.site.urls),
     path("api/", api.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
