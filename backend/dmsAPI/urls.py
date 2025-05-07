@@ -14,18 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from ninja import NinjaAPI
-from dmsApp.views import router
-
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path
+from dmsAPI.views.auth import authRouter
+from dmsAPI.views.pdf import pdfRouter
+from ninja import NinjaAPI
+from ninja.security import django_auth
 
-api = NinjaAPI()
-api.add_router("/upload", router)
+api = NinjaAPI(auth=django_auth)
+api.add_router("/upload", pdfRouter)
+api.add_router("/auth", authRouter)
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/", api.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path("admin/", admin.site.urls),
+                  path("api/", api.urls),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

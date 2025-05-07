@@ -1,11 +1,11 @@
-from ninja import Router, File
-from ninja.files import UploadedFile
 from django.http import JsonResponse
-from .models import PDFDocument
+from dmsApp.models import PDFDocument
+from ninja import Router, UploadedFile, File
 
-router = Router()
+pdfRouter = Router()
 
-@router.post("/upload")
+
+@pdfRouter.post("/upload")
 def upload_pdf(request, file: UploadedFile = File(...)):
     if not file.name.endswith(".pdf"):
         return JsonResponse({"error": "Nur PDF-Dateien erlaubt."}, status=400)
