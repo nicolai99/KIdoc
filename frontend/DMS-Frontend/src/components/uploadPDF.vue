@@ -1,8 +1,20 @@
 <template>
   <div>
-    <input type="file" accept="application/pdf" @change="handleFileUpload" />
-    <button @click="uploadFile" :disabled="!selectedFile">Upload</button>
+    <!-- <input type="file" accept="application/pdf" @change="handleFileUpload"/>
+     <button @click="uploadFile" :disabled="!selectedFile">Upload</button>!-->
+    <div class="card">
+      <Toast/>
+      <FileUpload name="demo[]" url="/api/upload" @upload="handleFileUpload($event)" :multiple="true"
+                  accept="application/pdf"
+                  :maxFileSize="1000000">
+        <template #empty>
+          <span>Drag and drop files to here to upload.</span>
+        </template>
+      </FileUpload>
+      <InputText></InputText>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -20,7 +32,7 @@ export default {
       if (file && file.type === "application/pdf") {
         this.selectedFile = file;
       } else {
-        alert("Bitte nur PDF-Dateien auswählen.");
+        alert("Bitte nur PDF-Dateien auswählen!");
         this.selectedFile = null;
       }
     },
@@ -32,13 +44,13 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://localhost:8000/api/upload/upload',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
+            'http://localhost:8000/api/upload/upload',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             }
-          }
         );
 
         console.log('Upload erfolgreich:', response.data);

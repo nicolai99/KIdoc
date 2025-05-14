@@ -6,14 +6,12 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    command: ["python", "manage.py", "runserver","0.0.0.0:8000"]
+    command: [ "python", "manage.py", "runserver","0.0.0.0:8000" ]
   frontend:
-    build:
-      context: ./frontend/DMS-Frontend
-    working_dir: /DMS-Frontend
+    working_dir: /app/DMS-Frontend
+    image: node:alpine
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend/DMS-Frontend/public:/DMS-Frontend/public
-      - ./frontend/DMS-Frontend/src:/DMS-Frontend/src
-    command:  ["npm","run","dev"]
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev"
