@@ -11,7 +11,6 @@
           <span>Drag and drop files to here to upload.</span>
         </template>
       </FileUpload>
-      <InputText></InputText>
     </div>
   </div>
 

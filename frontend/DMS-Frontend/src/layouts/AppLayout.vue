@@ -1,22 +1,39 @@
 <script setup lang="ts">
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {Bars3Icon, UserIcon, XMarkIcon} from '@heroicons/vue/24/outline'
+import {ref} from "vue";
+import {useRoute} from "vue-router";
 
+
+const route = useRoute()
+type navItem = { name: string, current: boolean, componentName: string, href: string }
+const navigation = ref<navItem[]>([])
 
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com'
 }
-const navigation = [
-  {name: 'Dashboard', href: '#', current: true},
-  {name: 'Archive', href: '#', current: false},
-  {name: 'Einstellungen', href: '#', current: false},
+navigation.value = [
+  {name: 'Home', href: '/home', current: false, componentName: 'home'},
+  {name: 'Archive', href: '#', current: false, componentName: 'archive'},
+  {name: 'Einstellungen', href: '/settings', current: false, componentName: 'settings'},
 ]
+
+const setCurrentNav = () => {
+  navigation.value.forEach((item: navItem) => {
+    console.log(route.name)
+    if (route.name == item.componentName) {
+      item.current = true
+
+    }
+  })
+}
 const userNavigation = [
   {name: 'Your Profile', href: '#'},
   {name: 'Settings', href: '#'},
   {name: 'Sign out', href: '#'},
 ]
+setCurrentNav()
 </script>
 
 
@@ -119,7 +136,7 @@ const userNavigation = [
     </header>
     <main>
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <RouterView/>
+        <slot name="content"></slot>
       </div>
     </main>
   </div>
