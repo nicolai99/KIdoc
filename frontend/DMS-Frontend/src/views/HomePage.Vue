@@ -7,6 +7,7 @@ import uploadPDF from "@/components/uploadPDF.vue";
   <AppLayout>
     <template #content>
       <uploadPDF/>
+      <p>test</p>
     </template>
   </AppLayout>
 </template>

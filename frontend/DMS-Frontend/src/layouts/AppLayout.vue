@@ -2,23 +2,27 @@
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {Bars3Icon, UserIcon, XMarkIcon} from '@heroicons/vue/24/outline'
 import {ref} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {useUserStore} from "@/stores/userStore.ts";
 
 
 const route = useRoute()
+const router = useRouter();
 type navItem = { name: string, current: boolean, componentName: string, href: string }
 const navigation = ref<navItem[]>([])
+const userStore = useUserStore();
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com'
-}
 navigation.value = [
   {name: 'Home', href: '/home', current: false, componentName: 'home'},
   {name: 'Archive', href: '#', current: false, componentName: 'archive'},
   {name: 'Einstellungen', href: '/settings', current: false, componentName: 'settings'},
 ]
-
+const logout = async () => {
+  await userStore.logout()
+  if (!userStore.isLoggedIn) {
+    router.push("/login");
+  }
+}
 const setCurrentNav = () => {
   navigation.value.forEach((item: navItem) => {
     console.log(route.name)
@@ -82,10 +86,12 @@ setCurrentNav()
                          :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">{{
                           item.name
                         }}</a>
+
                     </MenuItem>
                   </MenuItems>
                 </transition>
               </Menu>
+              <Button @click="logout()" label="Logout"></Button>
             </div>
           </div>
           <div class="-mr-2 flex md:hidden">
@@ -114,8 +120,8 @@ setCurrentNav()
               <UserIcon/>
             </div>
             <div class="ml-3">
-              <div class="text-base/5 font-medium text-white">{{ user.name }}</div>
-              <div class="text-sm font-medium text-gray-400">{{ user.email }}</div>
+              <div class="text-base/5 font-medium text-white">{{ userStore.name }}</div>
+              <div class="text-sm font-medium text-gray-400"></div>
             </div>
 
           </div>

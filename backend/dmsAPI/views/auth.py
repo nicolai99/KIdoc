@@ -11,7 +11,7 @@ authRouter = Router()
 log = logging.getLogger(__name__)
 
 
-@authRouter.get("/csrf-token")
+@authRouter.get("/csrf-token", auth=None)
 @ensure_csrf_cookie
 @csrf_exempt
 def csrf_token(request) -> HttpResponse:

@@ -1,62 +1,46 @@
 <template>
-  <div>
-    <!-- <input type="file" accept="application/pdf" @change="handleFileUpload"/>
-     <button @click="uploadFile" :disabled="!selectedFile">Upload</button>!-->
-    <div class="card">
-      <Toast/>
-      <FileUpload name="demo[]" url="/api/upload" @upload="handleFileUpload($event)" :multiple="true"
-                  accept="application/pdf"
-                  :maxFileSize="1000000">
-        <template #empty>
-          <span>Drag and drop files to here to upload.</span>
-        </template>
-      </FileUpload>
-    </div>
+  <div class="card">
+    <Toast/>
+    <FileUpload
+        name="file"
+        @uploader="handleFileUpload"
+        :multiple="false"
+        accept="application/pdf"
+        :maxFileSize="1000000"
+        customUpload
+    >
+      <template #empty>
+        <span>Drag and drop a PDF file here to upload.</span>
+      </template>
+    </FileUpload>
   </div>
-
 </template>
 
-<script>
-import axios from 'axios';
+<script setup lang="ts">
+import instance from '@/services/axios.ts';
+import {FileUploadUploaderEvent} from 'primevue/fileupload';
 
-export default {
-  data() {
-    return {
-      selectedFile: null
-    };
-  },
-  methods: {
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file && file.type === "application/pdf") {
-        this.selectedFile = file;
-      } else {
-        alert("Bitte nur PDF-Dateien auswählen!");
-        this.selectedFile = null;
-      }
-    },
-    async uploadFile() {
-      if (!this.selectedFile) return;
+const handleFileUpload = async (event: FileUploadUploaderEvent) => {
+  const selectedFile = event.files?.[0];
 
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
+  if (!(selectedFile instanceof File)) {
+    console.error('❌ Keine Datei ausgewählt.');
+    return;
+  }
 
-      try {
-        const response = await axios.post(
-            'http://localhost:8000/api/upload/upload',
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-        );
+  const formData = new FormData();
+  formData.append('file', selectedFile);
 
-        console.log('Upload erfolgreich:', response.data);
-      } catch (error) {
-        console.error('Fehler beim Upload:', error.response?.data || error.message);
-      }
-    }
+  try {
+    const response = await instance.post('/upload/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log('✅ Upload erfolgreich:', response.data);
+  } catch (error) {
+    console.error('❌ Fehler beim Upload:', error);
   }
 };
 </script>

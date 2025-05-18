@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-ve&$)nbx0oa^5!d)vst0%zrm!ey+yv5p*_ioq#qgu6vj(unv5m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
 
@@ -54,9 +54,11 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'dmsAPI.urls'
-
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

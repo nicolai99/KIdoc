@@ -1,5 +1,17 @@
 <script setup lang="ts">
+import {useUserStore} from "@/stores/userStore.ts";
+import {reactive} from "vue";
+import type {User} from "@/types/user.ts"
 
+const userStore = useUserStore();
+const user = reactive<User>({username: '', password: ''});
+const emit = defineEmits(["afterLogin"])
+const login = async () => {
+  await userStore.login(user)
+  if (userStore.isLoggedIn) {
+    emit("afterLogin");
+  }
+}
 </script>
 
 
@@ -15,29 +27,29 @@
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST">
         <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900">Email Adresse</label>
+          <label for="email" class="block text-sm/6 font-medium text-gray-900">Username</label>
           <div class="mt-2">
-            <input type="email" name="email" id="email" autocomplete="email" required=""
-                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+            <InputText v-model="user.username"></InputText>
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-900">Passwort</label>
+            <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
 
           </div>
           <div class="mt-2">
-            <input type="password" name="password" id="password" autocomplete="current-password" required=""
-                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+            <InputText v-model="user.password"></InputText>
           </div>
         </div>
 
         <div>
-          <button type="submit"
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            Login
-          </button>
+          <!--          <button type="submit"-->
+          <!--                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">-->
+          <!--            Login-->
+          <!--          </button>-->
+          <Button @click="login" label="Login"></Button>
+          <Message v-if="userStore.error" severity="error" :life="3000">Username or Password are wrong</Message>
         </div>
       </form>
     </div>
