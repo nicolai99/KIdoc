@@ -3,6 +3,7 @@ import HomePage from "@/views/HomePage.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SettingsPage from "@/views/SettingsPage.vue";
 import {useUserStore} from "@/stores/userStore.ts";
+import ArchivPage from "@/views/ArchivPage.vue";
 
 
 const router = createRouter(
@@ -13,7 +14,8 @@ const router = createRouter(
             {path: '/home', name: "home", component: HomePage}
             ,
             {path: '/login', name: "login", component: LoginPage},
-            {path: '/settings', name: "settings", component: SettingsPage}
+            {path: '/settings', name: "settings", component: SettingsPage},
+            {path: '/archive', name: "archive", component: ArchivPage}
 
         ]
     }

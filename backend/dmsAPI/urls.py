@@ -17,7 +17,9 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.db import IntegrityError
 from django.urls import path
+from dmsAPI.views.archive import archiveRouter
 from dmsAPI.views.auth import authRouter
 from dmsAPI.views.pdf import pdfRouter
 from ninja import NinjaAPI
@@ -26,6 +28,13 @@ from ninja.security import django_auth
 api = NinjaAPI(auth=django_auth)
 api.add_router("/upload", pdfRouter)
 api.add_router("/auth", authRouter)
+api.add_router("/archives", archiveRouter)
+
+
+@api.exception_handler(IntegrityError)
+def objectExists(request, exc):
+    return api.create_response(request, status=409, data={"message": "Object must be unique", "exception": str(exc)})
+
 
 urlpatterns = [
                   path("admin/", admin.site.urls),

@@ -14,7 +14,7 @@ const userStore = useUserStore();
 
 navigation.value = [
   {name: 'Home', href: '/home', current: false, componentName: 'home'},
-  {name: 'Archive', href: '#', current: false, componentName: 'archive'},
+  {name: 'Archive', href: '/archive', current: false, componentName: 'archive'},
   {name: 'Einstellungen', href: '/settings', current: false, componentName: 'settings'},
 ]
 const logout = async () => {
@@ -137,7 +137,9 @@ setCurrentNav()
 
     <header class="bg-white shadow-sm">
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+          <slot name="subheader"></slot>
+        </h1>
       </div>
     </header>
     <main>
