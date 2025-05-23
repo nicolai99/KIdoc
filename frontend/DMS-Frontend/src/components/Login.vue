@@ -2,14 +2,24 @@
 import {useUserStore} from "@/stores/userStore.ts";
 import {reactive} from "vue";
 import type {User} from "@/types/user.ts"
+import {useToast} from "primevue/usetoast";
 
 const userStore = useUserStore();
 const user = reactive<User>({username: '', password: ''});
+const toast = useToast();
 const emit = defineEmits(["afterLogin"])
 const login = async () => {
   await userStore.login(user)
   if (userStore.isLoggedIn) {
     emit("afterLogin");
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Login error",
+      detail: "Username or Password are wrong",
+      group: "login",
+      life: 3000
+    })
   }
 }
 </script>
@@ -25,11 +35,11 @@ const login = async () => {
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="#" method="POST">
+      <form class="space-y-6" @submit.prevent="login" method="POST">
         <div>
           <label for="email" class="block text-sm/6 font-medium text-gray-900">Username</label>
           <div class="mt-2">
-            <InputText v-model="user.username"></InputText>
+            <InputText class="w-full" v-model="user.username"></InputText>
           </div>
         </div>
 
@@ -39,7 +49,7 @@ const login = async () => {
 
           </div>
           <div class="mt-2">
-            <InputText v-model="user.password"></InputText>
+            <InputText class="w-full" v-model="user.password" type="password"></InputText>
           </div>
         </div>
 
@@ -48,13 +58,12 @@ const login = async () => {
           <!--                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">-->
           <!--            Login-->
           <!--          </button>-->
-          <Button @click="login" label="Login"></Button>
-          <Message v-if="userStore.error" severity="error" :life="3000">Username or Password are wrong</Message>
+          <Button type="submit" label="Login"></Button>
         </div>
       </form>
     </div>
   </div>
-
+  <Toast position="top-center" group="login"/>
 </template>
 
 

@@ -7,9 +7,11 @@ archiveStore.getArchives()
 </script>
 
 <template>
-  <p v-for="archive in archiveStore.archives">
-    {{ archive.name }}
-  </p>
+  <data-table :value="archiveStore.archives">
+    <Column field="name" header="Name"></Column>
+    <Column field="create_on" header="Erstellt am"></Column>
+  </data-table>
+
 </template>
 
 <style scoped>
