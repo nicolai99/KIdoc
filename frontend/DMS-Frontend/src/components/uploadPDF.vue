@@ -18,13 +18,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import instance from '@/services/axios.ts';
 import type { FileUploadUploaderEvent, FileUploadRemoveEvent } from 'primevue/fileupload';
 
 const toast = useToast();
-const uploadedFiles = ref<{file: File, id: number}[]>([]);
+const uploadedFiles = ref<{ file: File, id: number, url: string }[]>([]);
+
+const emit = defineEmits<{
+  (e: 'upload-success', data: { id: number; name: string; url: string }): void;
+  (e: 'remove-success', pdfId: number): void;
+}>();
 
 const handleFileUpload = async (event: FileUploadUploaderEvent) => {
   const files = event.files;
@@ -51,10 +56,16 @@ const handleFileUpload = async (event: FileUploadUploaderEvent) => {
     });
 
     const pdfId = response.data.id;
-    uploadedFiles.value.push({file: selectedFile, id: pdfId});
+    const pdfUrl = response.data.url;
+    const pdfName = response.data.name;
+
+    uploadedFiles.value.push({ file: selectedFile, id: pdfId, url: pdfUrl });
 
     toast.add({severity:'success', summary:'Erfolg', detail:'Datei wurde erfolgreich hochgeladen', life: 3000});
     console.log('✅ Upload erfolgreich:', response.data);
+
+    emit('upload-success', { id: pdfId, name: pdfName, url: pdfUrl });
+
   } catch (error) {
     toast.add({severity:'error', summary:'Upload Fehler', detail:'Fehler beim Hochladen der Datei', life: 3000});
     console.error('❌ Fehler beim Upload:', error);
@@ -63,18 +74,22 @@ const handleFileUpload = async (event: FileUploadUploaderEvent) => {
 
 const handleFileRemove = async (event: FileUploadRemoveEvent) => {
   const removedFile = event.file as File;
-  const fileIndex = uploadedFiles.value.findIndex(f => f.file.name === removedFile.name);
-  if (fileIndex === -1) {
-    toast.add({severity:'warn', summary:'Datei nicht gefunden', detail:'Diese Datei wurde nicht hochgeladen.', life: 3000});
+  const fileEntry = uploadedFiles.value.find(f => f.file.name === removedFile.name);
+
+  if (!fileEntry) {
+    toast.add({severity:'warn', summary:'Datei nicht gefunden', detail:'Diese Datei wurde nicht hochgeladen (lokal).', life: 3000});
     return;
   }
 
-  const pdfId = uploadedFiles.value[fileIndex].id;
+  const pdfId = fileEntry.id;
 
   try {
     await instance.delete(`/upload/delete/${pdfId}`);
     toast.add({severity:'success', summary:'Erfolg', detail:'Datei wurde gelöscht', life: 3000});
-    uploadedFiles.value.splice(fileIndex, 1);
+
+    uploadedFiles.value = uploadedFiles.value.filter(f => f.id !== pdfId);
+    emit('remove-success', pdfId);
+
   } catch (error) {
     toast.add({severity:'error', summary:'Lösch Fehler', detail:'Fehler beim Löschen der Datei', life: 3000});
     console.error('❌ Fehler beim Löschen:', error);
