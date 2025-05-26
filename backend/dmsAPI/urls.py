@@ -22,6 +22,7 @@ from django.urls import path
 from dmsAPI.views.archive import archiveRouter
 from dmsAPI.views.auth import authRouter
 from dmsAPI.views.pdf import pdfRouter
+from dmsAPI.views.type import typeRouter
 from ninja import NinjaAPI
 from ninja.security import django_auth
 
@@ -29,6 +30,7 @@ api = NinjaAPI(auth=django_auth)
 api.add_router("/upload", pdfRouter)
 api.add_router("/auth", authRouter)
 api.add_router("/archives", archiveRouter)
+api.add_router("/type", typeRouter)
 
 
 @api.exception_handler(IntegrityError)
