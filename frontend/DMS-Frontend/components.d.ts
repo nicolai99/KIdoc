@@ -8,18 +8,24 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddAttribute: typeof import('./src/components/AddAttribute.vue')['default']
     Button: typeof import('primevue/button')['default']
+    Card: typeof import('primevue/card')['default']
     Column: typeof import('primevue/column')['default']
+    CreateArchive: typeof import('./src/components/CreateArchive.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
+    Dialog: typeof import('primevue/dialog')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
+    FloatLabel: typeof import('primevue/floatlabel')['default']
     InputText: typeof import('primevue/inputtext')['default']
-    ListArchives: typeof import('./src/components/listArchives.vue')['default']
+    ListArchives: typeof import('./src/components/ListArchives.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     Message: typeof import('primevue/message')['default']
     PdfViewer: typeof import('./src/components/PdfViewer.vue')['default']
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('primevue/select')['default']
     Toast: typeof import('primevue/toast')['default']
     UploadPDF: typeof import('./src/components/uploadPDF.vue')['default']
   }

@@ -1,10 +1,11 @@
 from typing import List
 
 from django.http import HttpResponse
+from ninja import Router
+
 from dmsAPI.schema.ArchiveSchema import ArchiveSchema
 from dmsApp.models import Archive
 from dmsApp.service.ArchiveService import ArchiveService
-from ninja import Router
 
 archiveRouter = Router()
 
@@ -15,7 +16,14 @@ def getArchives(request):
 
 
 @archiveRouter.post("/", tags=["Archive"], summary="Create a new archive", response={201: None})
-def createArchive(request, archive: ArchiveSchema):
+def createArchive(request, archiveDTO: ArchiveSchema):
     service = ArchiveService()
-    service.createArchive(_name=archive.name)
+    service.createArchive(archiveDTO)
     return HttpResponse(201)
+
+
+@archiveRouter.put("/{id}", tags=["Archive"], summary="Edit archive name", response={200: None})
+def editArchiveName(request, id: int, archiveDTO: ArchiveSchema):
+    service = ArchiveService()
+    service.editArchiveName(id, archiveDTO)
+    return HttpResponse(200)

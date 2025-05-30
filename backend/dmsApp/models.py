@@ -35,7 +35,6 @@ class Attribute(BaseModel):
 
 class PDFDocument(BaseModel):
     file = models.FileField(upload_to="pdfs/")
-    type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name="docs")
     archive = models.ForeignKey(Archive, on_delete=models.CASCADE, related_name="docs")
 
     def __str__(self):

@@ -1,4 +1,9 @@
+from django.apps import apps
 from django.contrib import admin
-from .models import PDFDocument
-# Register your models here.
-admin.site.register(PDFDocument)
+
+models = apps.get_app_config('dmsApp').get_models()
+for model in models:
+    try:
+        admin.site.register(model)
+    except admin.sites.AlreadyRegistered:
+        pass

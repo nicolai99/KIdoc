@@ -17,23 +17,34 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.db import IntegrityError
 from django.urls import path
-from dmsAPI.views.archive import archiveRouter
-from dmsAPI.views.auth import authRouter
-from dmsAPI.views.pdf import pdfRouter
 from ninja import NinjaAPI
 from ninja.security import django_auth
+
+from dmsAPI.ProcessingError import ProcessingError
+from dmsAPI.views.archive import archiveRouter
+from dmsAPI.views.attribute import attributeRouter
+from dmsAPI.views.auth import authRouter
+from dmsAPI.views.pdf import pdfRouter
+from dmsAPI.views.type import typeRouter
 
 api = NinjaAPI(auth=django_auth)
 api.add_router("/upload", pdfRouter)
 api.add_router("/auth", authRouter)
 api.add_router("/archives", archiveRouter)
+api.add_router("types", typeRouter)
+api.add_router("/attributes", attributeRouter)
 
 
-@api.exception_handler(IntegrityError)
+@api.exception_handler(ProcessingError)
+def objectExists(request, exc: ProcessingError):
+    return api.create_response(request, status=400,
+                               data={"title": "Error in Objects", "message": exc.message, "error": exc.code})
+
+
+@api.exception_handler(Exception)
 def objectExists(request, exc):
-    return api.create_response(request, status=409, data={"message": "Object must be unique", "exception": str(exc)})
+    return api.create_response(request, status=500, data={"title": "Unhandled Error", "message": str(exc)})
 
 
 urlpatterns = [

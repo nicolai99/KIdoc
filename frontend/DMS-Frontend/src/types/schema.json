@@ -1,0 +1,512 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NinjaAPI",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "paths": {
+    "/api/upload/upload": {
+      "post": {
+        "operationId": "dmsAPI_views_pdf_upload_pdf",
+        "summary": "Upload Pdf",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "format": "binary",
+                    "title": "File",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "title": "FileParams",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/upload/delete/{pdf_id}": {
+      "delete": {
+        "operationId": "dmsAPI_views_pdf_delete_pdf",
+        "summary": "Delete Pdf",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pdf_id",
+            "schema": {
+              "title": "Pdf Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/csrf-token": {
+      "get": {
+        "operationId": "dmsAPI_views_auth_csrf_token",
+        "summary": "Csrf Token",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "dmsAPI_views_auth_loginUser",
+        "summary": "Loginuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthSchema"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "dmsAPI_views_auth_logout",
+        "summary": "Logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/user": {
+      "get": {
+        "operationId": "dmsAPI_views_auth_getUser",
+        "summary": "Getuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/archives/": {
+      "get": {
+        "operationId": "dmsAPI_views_archive_getArchives",
+        "summary": "Get all archives",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ArchiveSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Archive"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "dmsAPI_views_archive_createArchive",
+        "summary": "Create a new archive",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "Archive"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchiveSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/archives/{id}": {
+      "put": {
+        "operationId": "dmsAPI_views_archive_editArchiveName",
+        "summary": "Edit archive name",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "title": "Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Archive"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchiveSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/types/": {
+      "get": {
+        "operationId": "dmsAPI_views_type_getAllTypes",
+        "summary": "Get all Types",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TypeSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Type"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/attributes/": {
+      "post": {
+        "operationId": "dmsAPI_views_attribute_addAttribute",
+        "summary": "Add Attribute",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Attribute"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttributesSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/attributes/{id}": {
+      "delete": {
+        "operationId": "dmsAPI_views_attribute_deleteAttribute",
+        "summary": "Delete Attribute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "title": "Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Attribute"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthSchema": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "AuthSchema",
+        "type": "object"
+      },
+      "ArchiveSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createon"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/AttributesSchema"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "ArchiveSchema",
+        "type": "object"
+      },
+      "AttributesSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createon"
+          },
+          "archive_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archive Id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TypeSchema"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 255,
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "name",
+          "label"
+        ],
+        "title": "AttributesSchema",
+        "type": "object"
+      },
+      "TypeSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createon"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "TypeSchema",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "SessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      }
+    }
+  },
+  "servers": []
+}
