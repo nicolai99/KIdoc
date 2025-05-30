@@ -9,6 +9,10 @@ import router from "@/router/router.ts"
 import {createPinia} from "pinia";
 import piniaPersist from 'pinia-plugin-persistedstate'
 import {useUserStore} from "@/stores/userStore.ts";
+import { GlobalWorkerOptions } from 'pdfjs-dist';
+import ConfirmationService from 'primevue/confirmationservice';
+
+GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 const app = createApp(App);
 
@@ -33,5 +37,6 @@ app.use(PrimeVue, {
     }
 });
 app.use(ToastService);
+app.use(ConfirmationService);
 
 app.mount('#app');

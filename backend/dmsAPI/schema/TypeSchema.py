@@ -4,6 +4,7 @@ from typing import Optional
 from ninja import ModelSchema
 
 from dmsApp.models import Type
+from ninja import ModelSchema
 
 
 class TypeSchema(ModelSchema):
@@ -13,4 +14,4 @@ class TypeSchema(ModelSchema):
 
     class Config:
         model = Type
-        model_fields = "__all__"
+        model_fields = ["id", "createOn", "name"]

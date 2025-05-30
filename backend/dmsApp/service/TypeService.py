@@ -1,13 +1,16 @@
-from dmsAPI.ProcessingError import ProcessingError
+from django.db import IntegrityError
 from dmsApp.models import Type
 
 
 class TypeService:
-    def getAllTypes(self):
+    @staticmethod
+    def getTypes() -> Type:
         return Type.objects.all()
-    
-    def getTypeById(self, id):
+
+    def createType(self, _name) -> None:
+        type = Type()
+        type.name = _name
         try:
-            return Type.objects.get(id=id)
-        except Type.DoesNotExist:
-            raise ProcessingError("Type does not exist", 3)
+            type.save()
+        except IntegrityError as e:
+            raise IntegrityError(e)
