@@ -1,6 +1,6 @@
 from typing import List
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from ninja import Router
 
 from dmsAPI.schema.ArchiveSchema import ArchiveSchema
@@ -27,3 +27,11 @@ def editArchiveName(request, id: int, archiveDTO: ArchiveSchema):
     service = ArchiveService()
     service.editArchiveName(id, archiveDTO)
     return HttpResponse(200)
+
+@archiveRouter.get("/{archive_id}/", tags=["Archive"], summary="Get archive by ID", response=ArchiveSchema)
+def getArchiveById(request, archive_id: int):
+    try:
+        archive = Archive.objects.prefetch_related('attributes__type').get(id=archive_id)
+        return archive
+    except Archive.DoesNotExist:
+        raise Http404("Archive not found")

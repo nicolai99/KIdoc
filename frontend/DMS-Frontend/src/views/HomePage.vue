@@ -11,14 +11,18 @@ import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
+
+import type { ArchiveSchema, AttributesSchema } from '@/types/output';
 
 
 interface PdfEntry {
   id: number;
   name: string;
   content_url: string | null;
+  archive_id: number;
 }
 
 const currentPdfSource = ref<string>('');
@@ -28,6 +32,9 @@ const errorLoadingPdfs = ref<string | null>(null);
 
 const displayPdfDialog = ref<boolean>(false);
 const dialogPdfTitle = ref<string>('');
+
+
+const selectedArchiveDetails = ref<ArchiveSchema | null>(null);
 
 const userStore = useUserStore();
 const confirm = useConfirm();
@@ -41,7 +48,7 @@ const fetchPdfs = async () => {
             'X-CSRFToken': userStore.csrfToken || '',
         }
     });
-    pdfList.value = response.data;
+    pdfList.value = response.data as PdfEntry[];
 
   } catch (error) {
     console.error('Error fetching PDFs:', error);
@@ -71,10 +78,20 @@ const handleRemoveSuccess = async (pdfId: number) => {
   console.log(`PDF with ID ${pdfId} removed successfully (via uploadPDF component), re-fetching list.`);
 };
 
-const selectPdfToView = (pdfEntry: PdfEntry) => {
+const selectPdfToView = async (pdfEntry: PdfEntry) => {
   if (pdfEntry.content_url) {
     currentPdfSource.value = pdfEntry.content_url;
     dialogPdfTitle.value = pdfEntry.name || `PDF ${pdfEntry.id}`;
+
+    try {
+      const response = await instance.get(`/archives/${pdfEntry.archive_id}/`);
+      selectedArchiveDetails.value = response.data as ArchiveSchema;
+      console.log('Fetched Archive Details:', selectedArchiveDetails.value);
+    } catch (error) {
+      console.error(`Error fetching archive details for archive ID ${pdfEntry.archive_id}:`, error);
+      selectedArchiveDetails.value = null;
+    }
+
     displayPdfDialog.value = true;
   } else {
     console.warn('Selected PDF has no content URL. Cannot display.');
@@ -172,10 +189,24 @@ onMounted(() => {
         :modal="true"
         :draggable="false"
         :resizable="false"
-        :style="{width: '80vw', height: '90vh'}"
-        contentClass="p-dialog-content-scrollable" >
-        <div class="pdf-viewer-dialog-wrapper">
-            <PdfViewer :pdfSource="currentPdfSource" />
+        :style="{width: '90vw', height: '90vh'}" contentClass="p-dialog-content-scrollable" >
+
+        <div class="pdf-details-layout"> <div class="attribute-panel">
+                <h3>Archiv &lt;{{ selectedArchiveDetails?.name || 'N/A' }}&gt;</h3>
+                <div v-if="selectedArchiveDetails?.attributes?.length">
+                    <h4>Attribute</h4>
+                    <div v-for="attr in selectedArchiveDetails.attributes" :key="attr.id" class="attribute-item">
+                        <label>{{ attr.label || attr.name }} ({{ attr.type?.name }})</label>
+                        <InputText :placeholder="`Wert für ${attr.label || attr.name}`" disabled class="w-full" />
+                    </div>
+                </div>
+                <div v-else>
+                    <p>Keine Attribute für dieses Archiv konfiguriert.</p>
+                </div>
+            </div>
+            <div class="pdf-panel">
+                <PdfViewer :pdfSource="currentPdfSource" />
+            </div>
         </div>
       </Dialog>
     </template>
@@ -246,10 +277,49 @@ p {
     padding-right: 5px;
 }
 
+.pdf-details-layout {
+    display: flex;
+    height: 100%;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.attribute-panel {
+    flex: 0 0 30%;
+    padding-right: 20px;
+    border-right: 1px solid #eee;
+    overflow-y: auto;
+}
+
+.attribute-panel h3, .attribute-panel h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.attribute-item {
+    margin-bottom: 15px;
+}
+
+.attribute-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.pdf-panel {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+
 
 :deep(.p-dialog-content-scrollable) {
-    height: calc(100% - 50px);
-    overflow-y: hidden !important;
+    height: calc(100% - 50px) !important;
+    overflow: hidden !important;
     padding: 0 !important;
 }
 

@@ -4,3 +4,4 @@ class PdfSchema(Schema):
     id: int
     name: str
     content_url: str
+    archive_id: int

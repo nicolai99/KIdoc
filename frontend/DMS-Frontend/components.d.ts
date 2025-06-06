@@ -10,7 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddAttribute: typeof import('./src/components/AddAttribute.vue')['default']
     Button: typeof import('primevue/button')['default']
-    Card: typeof import('primevue/card')['default']
     Column: typeof import('primevue/column')['default']
     CreateArchive: typeof import('./src/components/CreateArchive.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
