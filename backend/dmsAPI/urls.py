@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -24,6 +25,7 @@ from ninja.security import django_auth
 from dmsAPI.ProcessingError import ProcessingError
 from dmsAPI.views.archive import archiveRouter
 from dmsAPI.views.attribute import attributeRouter
+from dmsAPI.views.attributeValues import attributeValuesRouter
 from dmsAPI.views.auth import authRouter
 from dmsAPI.views.pdf import pdfRouter
 from dmsAPI.views.type import typeRouter
@@ -34,6 +36,7 @@ api.add_router("/auth", authRouter)
 api.add_router("/archives", archiveRouter)
 api.add_router("types", typeRouter)
 api.add_router("/attributes", attributeRouter)
+api.add_router("/attributeValues", attributeValuesRouter)
 
 
 @api.exception_handler(ProcessingError)

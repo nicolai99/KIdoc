@@ -5,9 +5,9 @@ import {ref} from "vue";
 
 const showAddAttribute = ref(false);
 const archivStore = useArchiveStore();
-const addAttributeToArchive = () => {
+const addAttributeToArchive = (attribute) => {
   showAddAttribute.value = false;
-  archivStore.archive.attributes.push(archivStore.attribute)
+  archivStore.archive.attributes.push(attribute)
 }
 const emit = defineEmits(['after-create-archive']);
 const storeArchive = async () => {

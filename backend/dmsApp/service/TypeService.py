@@ -1,4 +1,6 @@
 from django.db import IntegrityError
+
+from dmsAPI.ProcessingError import ProcessingError
 from dmsApp.models import Type
 
 
@@ -14,3 +16,9 @@ class TypeService:
             type.save()
         except IntegrityError as e:
             raise IntegrityError(e)
+
+    def getTypeById(self, id):
+        try:
+            return Type.objects.get(id=id)
+        except Type.DoesNotExist:
+            raise ProcessingError("Type does not exist", 1)

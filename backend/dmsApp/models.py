@@ -34,12 +34,13 @@ class Attribute(BaseModel):
 
 
 class PDFDocument(BaseModel):
-    file = models.BinaryField()
+    file = models.FileField(
+        upload_to="pdfs/")
     name = models.CharField(max_length=255)
     archive = models.ForeignKey(Archive, on_delete=models.CASCADE, related_name="docs")
 
     def __str__(self):
-        return f"PDF {self.id} - {self.file.name}"
+        return f"PDF {self.id} - {self.name}"
 
 
 class AttributesValue(BaseModel):

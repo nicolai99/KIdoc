@@ -1,7 +1,9 @@
+from typing import Optional
+
 from ninja import Schema
 
+
 class PdfSchema(Schema):
-    id: int
+    id: Optional[int] = None
     name: str
-    content_url: str
     archive_id: int

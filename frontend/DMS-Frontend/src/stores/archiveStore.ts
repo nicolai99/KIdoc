@@ -23,6 +23,7 @@ export const useArchiveStore = defineStore("ArchiveStore", {
         types: null as TypeSchema[] | null,
         archiveSaveError: false as boolean,
         archiveSaveErrorMessage: "" as string,
+        attributeValues: [] as any,
     }),
     actions: {
         async getArchives() {
