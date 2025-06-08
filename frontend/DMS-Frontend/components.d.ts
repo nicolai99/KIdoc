@@ -26,6 +26,7 @@ declare module 'vue' {
     ListArchives: typeof import('./src/components/ListArchives.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     PdfViewer: typeof import('./src/components/PdfViewer.vue')['default']
+    ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']

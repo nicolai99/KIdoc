@@ -24,6 +24,7 @@ export const useArchiveStore = defineStore("ArchiveStore", {
         archiveSaveError: false as boolean,
         archiveSaveErrorMessage: "" as string,
         attributeValues: [] as any,
+        waitForGemini: false
     }),
     actions: {
         async getArchives() {
@@ -45,6 +46,12 @@ export const useArchiveStore = defineStore("ArchiveStore", {
         async getTypes() {
             const response = await instance.get("/types/")
             this.types = response.data
+        },
+        async getAttributeValuesFromGeminiByPdf(pdfId: number) {
+            this.waitForGemini = true;
+            const response = await instance.get(`/attributeValues/geminiValues/${pdfId}`)
+            this.attributeValues = response.data
+            this.waitForGemini = false;
         }
 
     }

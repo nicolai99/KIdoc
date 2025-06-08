@@ -27,7 +27,7 @@ class ArchiveSchema(Schema):
 pdfRouter = Router()
 
 
-@pdfRouter.post("/upload", response={200: PdfSchema}, auth=django_auth)
+@pdfRouter.post("/upload", response={200: int}, auth=django_auth)
 def upload_pdf(request, file: UploadedFile = File(...),
                data: PdfUploadRequestSchema = Form(...)):
     try:
@@ -41,12 +41,7 @@ def upload_pdf(request, file: UploadedFile = File(...),
         archive=pdf_archive
     )
     pdf_doc.save()
-    return {
-        "id": pdf_doc.id,
-        "name": pdf_doc.name,
-        "content_url": request.build_absolute_uri(f"/api/upload/pdfs/{pdf_doc.id}/"),
-        "archive_id": pdf_doc.archive.id
-    }
+    return pdf_doc.id
 
 
 @pdfRouter.get("/files", response=List[PdfSchema], auth=django_auth)

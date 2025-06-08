@@ -6,7 +6,8 @@ export const usePdfStore = defineStore('pdfStore', {
         pdf: null as File | null,
         id: null as number | null,
         archive_id: null as number | null,
-        uploadError: false
+        uploadError: false,
+        loading: false,
     }),
     actions: {
 
@@ -15,14 +16,20 @@ export const usePdfStore = defineStore('pdfStore', {
             formData.append('file', this.pdf as Blob);
             formData.append('archive_id', String(this.archive_id));
             this.uploadError = false;
+            let response = null;
+            this.loading = true;
             try {
-                const response = await instance.post('/upload/upload', formData, {
+                response = await instance.post('/upload/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+                this.id = response.data
+                this.loading = false;
             } catch (e) {
                 this.uploadError = true;
+            } finally {
+                this.loading = false;
             }
         }
     }

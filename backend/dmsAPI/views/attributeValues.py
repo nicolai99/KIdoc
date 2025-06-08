@@ -19,7 +19,7 @@ def getAttributeValuesByPdf(request, id: int):
 
 
 @attributeValuesRouter.get("/geminiValues/{id}", tags=["AttributeValues"],
-                           summary="Get Attribute Values By Pdf from Gemini",
+                           summary="Get Attribute Values By Pdf from Gemini", response=list[str]
                            )
 def getGeminiAttributeValuesByPdf(request, id):
     geminiService = GeminiService()

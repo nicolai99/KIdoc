@@ -41,12 +41,12 @@ class GeminiService:
             self.attributes.append(value)
         self.attributes = json.dumps(self.attributes)
         self.generateContent()
-        return self.response.text
+        return self.response.text.replace("\n", "").split(",")
 
     def generateContent(self):
         self.response = self.client.models.generate_content(
             model="gemini-2.0-flash-lite",
             contents=[f"In diesem Doc nach attributen suchen", self.attributes, self.geminiFile,
-                      """antworte nur in einer kommaseparierten liste (Datum im dd.mm.yyyy) format ohne zeilenumbruch value1,value2""",
+                      """antworte nur in einer kommaseparierten liste (Datum im dd.mm.yyyy format) value1,value2""",
                       ]
         )

@@ -71,6 +71,7 @@ const confirmArchiveSelection = async () => {
   await pdfStore.uploadPdf();
   if (!pdfStore.uploadError) {
     handleFileRemove();
+    await archiveStore.getAttributeValuesFromGeminiByPdf(pdfStore.id!)
     emit("upload-success")
   }
 };

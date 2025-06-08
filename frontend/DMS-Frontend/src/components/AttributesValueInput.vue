@@ -8,7 +8,7 @@ defineProps({id: Number, type: String, label: String, value: [String, Number], i
 <template>
   <div v-if="type=='date'">
     <FloatLabel variant="on">
-      <DatePicker :value="value">
+      <DatePicker v-model="archiveStore.attributeValues[index]" dateFormat="dd.mm.yy">
       </DatePicker>
       <label>{{ label }}</label>
     </FloatLabel>
