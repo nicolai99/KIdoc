@@ -29,27 +29,26 @@ const login = async () => {
 
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img class="mx-auto h-10 w-auto"
-           src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"/>
+      <img class="mx-auto h-30 w-auto"
+           src="../assets/kiDocLogo.png" alt="Your Company"/>
       <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login</h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" @submit.prevent="login" method="POST">
+      <form class="space-y-5" @submit.prevent="login" method="POST">
         <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900">Username</label>
-          <div class="mt-2">
+          <FloatLabel variant="on">
             <InputText class="w-full" v-model="user.username"></InputText>
-          </div>
+            <label for="">Username</label>
+          </FloatLabel>
         </div>
 
         <div>
-          <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
-
-          </div>
-          <div class="mt-2">
-            <InputText class="w-full" v-model="user.password" type="password"></InputText>
+          <div>
+            <FloatLabel variant="on">
+              <InputText class="w-full" v-model="user.password" type="password"></InputText>
+              <label for="password">Password</label>
+            </FloatLabel>
           </div>
         </div>
 

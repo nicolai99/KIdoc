@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class BaseModel(models.Model):
@@ -41,6 +43,12 @@ class PDFDocument(BaseModel):
 
     def __str__(self):
         return f"PDF {self.id} - {self.name}"
+
+
+@receiver(post_delete, sender=PDFDocument)
+def delete_file_on_model_delete(sender, instance, **kwargs):
+    if instance.file:
+        instance.file.delete(save=False)
 
 
 class AttributesValue(BaseModel):
