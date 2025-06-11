@@ -8,14 +8,14 @@ import {useUserStore} from "@/stores/userStore.ts";
 
 const route = useRoute()
 const router = useRouter();
-type navItem = { name: string, current: boolean, componentName: string, href: string }
+type navItem = { name: string, current: boolean, componentName: string }
 const navigation = ref<navItem[]>([])
 const userStore = useUserStore();
 
 navigation.value = [
-  {name: 'Home', href: '/home', current: false, componentName: 'home'},
-  {name: 'Archive', href: '/archive', current: false, componentName: 'archive'},
-  {name: 'Einstellungen', href: '/settings', current: false, componentName: 'settings'},
+  {name: 'Home', current: false, componentName: 'home'},
+  {name: 'Archive', current: false, componentName: 'archives'},
+  {name: 'Einstellungen', current: false, componentName: 'settings'},
 ]
 const logout = async () => {
   await userStore.logout()
@@ -25,7 +25,6 @@ const logout = async () => {
 }
 const setCurrentNav = () => {
   navigation.value.forEach((item: navItem) => {
-    console.log(route.name)
     if (route.name == item.componentName) {
       item.current = true
 
@@ -55,7 +54,7 @@ setCurrentNav()
               <div class="ml-10 flex items-baseline space-x-4">
                 <RouterLink
                     :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
-                    v-for="item in navigation" :to="item.componentName">{{ item.name }}
+                    v-for="item in navigation" :to="{name:item.componentName}">{{ item.name }}
                 </RouterLink>
               </div>
             </div>
@@ -110,10 +109,10 @@ setCurrentNav()
 
       <DisclosurePanel class="md:hidden">
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-          <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
-                            :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
-                            :aria-current="item.current ? 'page' : undefined">{{ item.name }}
-          </DisclosureButton>
+          <RouterLink
+              :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
+              v-for="item in navigation" :to="{name:item.componentName}">{{ item.name }}
+          </RouterLink>
         </div>
         <div class="border-t border-gray-700 pt-4 pb-3">
           <div class="flex items-center px-5">

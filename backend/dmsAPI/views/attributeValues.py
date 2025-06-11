@@ -3,7 +3,7 @@ import logging
 from ninja import Router
 
 from dmsAPI.schema.AttributesValueSchema import AttributesValueSchema
-from dmsApp.service.AttributeService import AttributeService
+from dmsApp.service.AttributeValuesService import AttributeValuesService
 from dmsApp.service.GeminiService import GeminiService
 from dmsApp.service.PdfService import PdfService
 
@@ -11,11 +11,27 @@ attributeValuesRouter = Router()
 logger = logging.getLogger(__name__)
 
 
-@attributeValuesRouter.get("/{id}", tags=["AttributeValues"], summary="Get Attribute Values By Pdf",
+@attributeValuesRouter.get("/list/{id}", tags=["AttributeValues"], summary="Get Attribute Values By Pdf",
                            response=list[AttributesValueSchema])
 def getAttributeValuesByPdf(request, id: int):
-    attributeService = AttributeService()
-    return attributeService.getAttributesByPdf(id)
+    attributeValuesService = AttributeValuesService()
+    return attributeValuesService.getAttributesByPdf(id)
+
+
+@attributeValuesRouter.get("/listValues/{id}", tags=["AttributeValues"], summary="Get Attribute Values By Pdf",
+                           response=list[str | int | None | float])
+def getAttributeValuesMinByPdf(request, id: int):
+    attributeValuesService = AttributeValuesService()
+    attributeValues = attributeValuesService.getAttributesByPdf(id)
+    listAtt = attributeValues.values_list('value', flat=True)
+    return listAtt
+
+
+@attributeValuesRouter.post("/{id}", tags=["AttributeValues"], summary="Set Attribute Values By Pdf",
+                            )
+def setAttributeValuesByPdf(request, id: int, values: list[str | int | None]):
+    attributeValuesService = AttributeValuesService()
+    return attributeValuesService.setAttributeValues(id, values)
 
 
 @attributeValuesRouter.get("/geminiValues/{id}", tags=["AttributeValues"],

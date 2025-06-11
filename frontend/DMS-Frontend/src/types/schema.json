@@ -6,93 +6,34 @@
     "description": ""
   },
   "paths": {
-    "/api/upload/upload": {
-      "post": {
-        "operationId": "dmsAPI_views_pdf_upload_pdf",
-        "summary": "Upload Pdf",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "properties": {
-                  "file": {
-                    "format": "binary",
-                    "title": "File",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "file"
-                ],
-                "title": "FileParams",
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          {
-            "SessionAuth": []
-          }
-        ]
-      }
-    },
-    "/api/upload/delete/{pdf_id}": {
-      "delete": {
-        "operationId": "dmsAPI_views_pdf_delete_pdf",
-        "summary": "Delete Pdf",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "pdf_id",
-            "schema": {
-              "title": "Pdf Id",
-              "type": "integer"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "SessionAuth": []
-          }
-        ]
-      }
-    },
     "/api/auth/csrf-token": {
       "get": {
         "operationId": "dmsAPI_views_auth_csrf_token",
-        "summary": "Csrf Token",
+        "summary": "Get CSRF token",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "Auth"
+        ]
       }
     },
     "/api/auth/login": {
       "post": {
         "operationId": "dmsAPI_views_auth_loginUser",
-        "summary": "Loginuser",
+        "summary": "Login",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
           }
         },
+        "tags": [
+          "Auth"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -115,6 +56,9 @@
             "description": "OK"
           }
         },
+        "tags": [
+          "Auth"
+        ],
         "security": [
           {
             "SessionAuth": []
@@ -125,12 +69,223 @@
     "/api/auth/user": {
       "get": {
         "operationId": "dmsAPI_views_auth_getUser",
-        "summary": "Getuser",
+        "summary": "Get User",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
           }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/upload/upload": {
+      "post": {
+        "operationId": "dmsAPI_views_pdf_upload_pdf",
+        "summary": "Upload a PDF file",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pdf"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "format": "binary",
+                    "title": "File",
+                    "type": "string"
+                  },
+                  "archive_id": {
+                    "title": "Archive Id",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "file",
+                  "archive_id"
+                ],
+                "title": "MultiPartBodyParams",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/upload/files": {
+      "get": {
+        "operationId": "dmsAPI_views_pdf_list_pdfs",
+        "summary": "List all PDFs",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PdfSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pdf"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/upload/pdfs/{pdf_id}/": {
+      "get": {
+        "operationId": "dmsAPI_views_pdf_get_pdf_content",
+        "summary": "Get PDF content",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pdf_id",
+            "schema": {
+              "title": "Pdf Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Pdf"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "dmsAPI_views_pdf_delete_pdf",
+        "summary": "Delete PDF",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pdf_id",
+            "schema": {
+              "title": "Pdf Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "Pdf"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/upload/pdfSearch/{archiveId}": {
+      "post": {
+        "operationId": "dmsAPI_views_pdf_pdfSearch",
+        "summary": "List all Pdf by Seachparameter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "archiveId",
+            "schema": {
+              "title": "Archiveid",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PdfWithValuesSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pdf"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "title": "Search",
+                "type": "array"
+              }
+            }
+          },
+          "required": true
         },
         "security": [
           {
@@ -198,7 +353,7 @@
         ]
       }
     },
-    "/api/archives/{id}": {
+    "/api/archives/edit/{id}": {
       "put": {
         "operationId": "dmsAPI_views_archive_editArchiveName",
         "summary": "Edit archive name",
@@ -238,29 +393,35 @@
         ]
       }
     },
-    "/api/types/": {
+    "/api/archives/{archive_id}": {
       "get": {
-        "operationId": "dmsAPI_views_type_getAllTypes",
-        "summary": "Get all Types",
-        "parameters": [],
+        "operationId": "dmsAPI_views_archive_getArchiveById",
+        "summary": "Get archive by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "archive_id",
+            "schema": {
+              "title": "Archive Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/TypeSchema"
-                  },
-                  "title": "Response",
-                  "type": "array"
+                  "$ref": "#/components/schemas/ArchiveSchema"
                 }
               }
             }
           }
         },
         "tags": [
-          "Type"
+          "Archive"
         ],
         "security": [
           {
@@ -328,6 +489,147 @@
           }
         ]
       }
+    },
+    "/api/types/": {
+      "get": {
+        "operationId": "dmsAPI_views_type_getTypes",
+        "summary": "Get all types",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TypeSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Type"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "dmsAPI_views_type_createType",
+        "summary": "Create a new type",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "Type"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TypeSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/attributeValues/{id}": {
+      "get": {
+        "operationId": "dmsAPI_views_attributeValues_getAttributeValuesByPdf",
+        "summary": "Get Attribute Values By Pdf",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "title": "Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AttributesValueSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AttributeValues"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/attributeValues/geminiValues/{id}": {
+      "get": {
+        "operationId": "dmsAPI_views_attributeValues_getGeminiAttributeValuesByPdf",
+        "summary": "Get Attribute Values By Pdf from Gemini",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AttributeValues"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -350,7 +652,20 @@
         "title": "AuthSchema",
         "type": "object"
       },
-      "ArchiveSchema": {
+      "PdfUploadRequestSchema": {
+        "properties": {
+          "archive_id": {
+            "title": "Archive Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "archive_id"
+        ],
+        "title": "PdfUploadRequestSchema",
+        "type": "object"
+      },
+      "PdfSchema": {
         "properties": {
           "id": {
             "anyOf": [
@@ -363,42 +678,20 @@
             ],
             "title": "Id"
           },
-          "createOn": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Createon"
-          },
-          "attributes": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/AttributesSchema"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Attributes"
-          },
           "name": {
-            "maxLength": 255,
             "title": "Name",
             "type": "string"
+          },
+          "archive_id": {
+            "title": "Archive Id",
+            "type": "integer"
           }
         },
         "required": [
-          "name"
+          "name",
+          "archive_id"
         ],
-        "title": "ArchiveSchema",
+        "title": "PdfSchema",
         "type": "object"
       },
       "AttributesSchema": {
@@ -459,6 +752,94 @@
         "title": "AttributesSchema",
         "type": "object"
       },
+      "AttributesValueMinSchema": {
+        "properties": {
+          "attribute": {
+            "$ref": "#/components/schemas/AttributesSchema"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "format": "date-time",
+            "title": "createOn",
+            "type": "string"
+          },
+          "pdf": {
+            "title": "Pdf",
+            "type": "integer"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute",
+          "createOn",
+          "pdf",
+          "value"
+        ],
+        "title": "AttributesValueMinSchema",
+        "type": "object"
+      },
+      "PdfWithValuesSchema": {
+        "properties": {
+          "attribute_values": {
+            "items": {
+              "$ref": "#/components/schemas/AttributesValueMinSchema"
+            },
+            "title": "Attribute Values",
+            "type": "array"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "format": "date-time",
+            "title": "createOn",
+            "type": "string"
+          },
+          "file": {
+            "title": "File",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "archive": {
+            "title": "Archive",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "attribute_values",
+          "createOn",
+          "file",
+          "name",
+          "archive"
+        ],
+        "title": "PdfWithValuesSchema",
+        "type": "object"
+      },
       "TypeSchema": {
         "properties": {
           "id": {
@@ -497,6 +878,101 @@
           }
         },
         "title": "TypeSchema",
+        "type": "object"
+      },
+      "ArchiveSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createon"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/AttributesSchema"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "ArchiveSchema",
+        "type": "object"
+      },
+      "AttributesValueSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "createOn": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createon"
+          },
+          "attribute": {
+            "$ref": "#/components/schemas/AttributesSchema"
+          },
+          "pdf": {
+            "$ref": "#/components/schemas/PdfSchema"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute",
+          "pdf",
+          "value"
+        ],
+        "title": "AttributesValueSchema",
         "type": "object"
       }
     },

@@ -19,7 +19,7 @@ export const usePdfStore = defineStore('pdfStore', {
             let response = null;
             this.loading = true;
             try {
-                response = await instance.post('/upload/upload', formData, {
+                response = await instance.post('/pdfs/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -31,6 +31,20 @@ export const usePdfStore = defineStore('pdfStore', {
             } finally {
                 this.loading = false;
             }
+        },
+        async deletePdf(pdfId: number) {
+            const response = await instance.delete(`/pdfs/delete/${pdfId}`)
+
+        },
+        async getPdfContent(pdfId: number) {
+            const response = await instance.get(`/pdfs/${pdfId}`, {
+                responseType: 'blob',
+            });
+
+            const blob = response.data;
+            const file = new File([blob], 'document.pdf', {type: 'application/pdf'});
+
+            this.pdf = file;
         }
     }
 })

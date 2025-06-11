@@ -2,7 +2,7 @@
 import {useArchiveStore} from "@/stores/archiveStore.ts";
 
 const archiveStore = useArchiveStore();
-defineProps({id: Number, type: String, label: String, value: [String, Number], index: Number})
+defineProps({id: Number, type: String, label: String, index: Number})
 </script>
 
 <template>

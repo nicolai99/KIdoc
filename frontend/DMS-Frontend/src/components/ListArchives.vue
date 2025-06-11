@@ -14,7 +14,14 @@ defineProps<{
 <template>
   <template></template>
   <data-table :value="archives">
-    <Column field="name" header="Name"></Column>
+    <Column header="Name">
+      <template #body="slotProps">
+        <RouterLink class="underline" :to="{name: 'search', params: {archiveId: slotProps.data.id}}">
+          {{ slotProps.data.name }}
+        </RouterLink>
+
+      </template>
+    </Column>
     <Column field="createOn" header="Erstellt am"></Column>
     <template #empty="slotProps">
       <div class="p-d-flex p-jc-center">

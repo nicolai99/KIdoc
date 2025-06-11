@@ -31,11 +31,11 @@ from dmsAPI.views.pdf import pdfRouter
 from dmsAPI.views.type import typeRouter
 
 api = NinjaAPI(auth=django_auth)
-api.add_router("/upload", pdfRouter)
 api.add_router("/auth", authRouter)
+api.add_router("/pdfs", pdfRouter)
 api.add_router("/archives", archiveRouter)
-api.add_router("types", typeRouter)
 api.add_router("/attributes", attributeRouter)
+api.add_router("types", typeRouter)
 api.add_router("/attributeValues", attributeValuesRouter)
 
 

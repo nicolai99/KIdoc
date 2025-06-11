@@ -22,13 +22,14 @@ def createArchive(request, archiveDTO: ArchiveSchema):
     return HttpResponse(201)
 
 
-@archiveRouter.put("/{id}", tags=["Archive"], summary="Edit archive name", response={200: None})
+@archiveRouter.put("/edit/{id}", tags=["Archive"], summary="Edit archive name", response={200: None})
 def editArchiveName(request, id: int, archiveDTO: ArchiveSchema):
     service = ArchiveService()
     service.editArchiveName(id, archiveDTO)
     return HttpResponse(200)
 
-@archiveRouter.get("/{archive_id}/", tags=["Archive"], summary="Get archive by ID", response=ArchiveSchema)
+
+@archiveRouter.get("/{archive_id}", tags=["Archive"], summary="Get archive by ID", response=ArchiveSchema)
 def getArchiveById(request, archive_id: int):
     try:
         archive = Archive.objects.prefetch_related('attributes__type').get(id=archive_id)
