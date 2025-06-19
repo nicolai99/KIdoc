@@ -13,7 +13,7 @@
         customUpload
     >
       <template #empty>
-        <span>Drag and drop a PDF file here to upload.</span>
+        <span>Drag and Drop um PDF abzulegen</span>
       </template>
     </FileUpload>
 
