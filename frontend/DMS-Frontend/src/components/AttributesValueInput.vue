@@ -21,7 +21,8 @@ defineProps({id: Number, type: String, label: String, index: Number})
   </div>
   <div v-else-if="type=='number'">
     <FloatLabel variant="on">
-      <InputNumber v-model="archiveStore.attributeValues[index]"></InputNumber>
+      <InputNumber v-model="archiveStore.attributeValues[index]" :use-grouping="false"
+                   :min-fraction-digits=2></InputNumber>
       <label>{{ label }}</label>
     </FloatLabel>
   </div>
