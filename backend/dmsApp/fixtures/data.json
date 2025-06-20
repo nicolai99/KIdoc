@@ -1,0 +1,67 @@
+[
+  {
+    "model": "dmsApp.archive",
+    "pk": 14,
+    "fields": {
+      "createOn": "2025-06-09T12:41:28.424Z",
+      "name": "Rechnungen"
+    }
+  },
+  {
+    "model": "dmsApp.type",
+    "pk": 2,
+    "fields": {
+      "createOn": "2025-05-23T13:48:09.316Z",
+      "name": "text"
+    }
+  },
+  {
+    "model": "dmsApp.type",
+    "pk": 3,
+    "fields": {
+      "createOn": "2025-05-23T13:50:25.600Z",
+      "name": "date"
+    }
+  },
+  {
+    "model": "dmsApp.type",
+    "pk": 4,
+    "fields": {
+      "createOn": "2025-05-23T13:51:02.930Z",
+      "name": "number"
+    }
+  },
+  {
+    "model": "dmsApp.attribute",
+    "pk": 12,
+    "fields": {
+      "createOn": "2025-06-09T12:41:28.437Z",
+      "name": "rechnungsdatum",
+      "label": "Rechnungsdatum",
+      "type": 3,
+      "archive": 14
+    }
+  },
+  {
+    "model": "dmsApp.attribute",
+    "pk": 13,
+    "fields": {
+      "createOn": "2025-06-09T12:41:28.437Z",
+      "name": "rechnungstext",
+      "label": "Rechnungstext",
+      "type": 2,
+      "archive": 14
+    }
+  },
+  {
+    "model": "dmsApp.attribute",
+    "pk": 14,
+    "fields": {
+      "createOn": "2025-06-09T12:41:28.437Z",
+      "name": "rechnungsbetrag",
+      "label": "Rechnungsbetrag",
+      "type": 4,
+      "archive": 14
+    }
+  }
+]

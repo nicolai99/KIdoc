@@ -11,7 +11,6 @@ declare module 'vue' {
     AddAttribute: typeof import('./src/components/AddAttribute.vue')['default']
     AttributesValueInput: typeof import('./src/components/AttributesValueInput.vue')['default']
     AttributesWithPdf: typeof import('./src/components/AttributesWithPdf.vue')['default']
-    AttributteValueInput: typeof import('./src/components/AttributteValueInput.vue')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     Column: typeof import('primevue/column')['default']

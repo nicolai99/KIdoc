@@ -5,14 +5,24 @@
 docker-compose build \
 docker-compose up
 
-## notes
+## Notes
 
 ### Django
 
+Connect to Django Container (default name django)\
+```docker exec -it django  bin/sh```
+
 ### Migration
 
-python manage.py makemigrations\
+```
 python manage.py migrate
+python manage.py loaddata data.json
+python manage.py createsuperuser
+```
+
+### Access
+
+http://localhost:5173/home
 
 ### links
 
