@@ -1,0 +1,17 @@
+services:
+  django:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    command: [ "python", "manage.py", "runserver","0.0.0.0:8000" ]
+  frontend:
+    working_dir: /app/DMS-Frontend
+    image: node:alpine
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev"
