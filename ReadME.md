@@ -20,6 +20,10 @@ python manage.py loaddata data.json
 python manage.py createsuperuser
 ```
 
+### API Key
+
+Place the Google API developer key in your ```.env``` file.
+
 ### Access
 
 http://localhost:5173/home
